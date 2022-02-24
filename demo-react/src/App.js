@@ -7,11 +7,8 @@ import Game from './components/Game';
 
 function App() {
   return (
-    <div>
-      <div className="h-24"></div>
-      <div class="w-5/6 justify-center flex flex-row">
-      <Game></Game>
-    </div>
+    <div className="background-img  App flex flex-1  flex-col h-full w-full relative">
+      <Menu></Menu>
     </div>
   );
 }
