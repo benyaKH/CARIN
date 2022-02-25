@@ -1,6 +1,6 @@
-import Cell from "./Cell"
+import { Cell } from "components";
 
-const Canvas = () => {
+export const Canvas = () => {
 
     return (
         <table class="bg-red-200 border-collapse border border-red-400 ">
@@ -63,5 +63,3 @@ const Canvas = () => {
         </table>
     )
 }
-
-export default Canvas

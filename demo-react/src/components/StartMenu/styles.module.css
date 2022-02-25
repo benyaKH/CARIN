@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
   }
-  .startButton {
+.startButton {
     border: none;
     outline: none;
     padding: 15px;

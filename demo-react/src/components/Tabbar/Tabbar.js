@@ -1,6 +1,6 @@
-import SelectAntibody from "./SelectAntibody"
+import { SelectAntibody } from "components";
 
-const Tabbar = () => {
+export const Tabbar = () => {
     return (
         <div className="w-72 bg-gray-200 ">
             <p className="m-2 text-red">AntibodyCost</p>
@@ -13,4 +13,3 @@ const Tabbar = () => {
     )
   }
   
-  export default Tabbar

@@ -1,4 +1,4 @@
-const SelectAntibody = () => {
+export const SelectAntibody = () => {
     
       return (
         <button className="rounded-md  w-20 h-20 m-2 bg-white">
@@ -6,4 +6,3 @@ const SelectAntibody = () => {
       )
   }
   
-  export default SelectAntibody
