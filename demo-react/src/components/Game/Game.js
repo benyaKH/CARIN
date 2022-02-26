@@ -4,7 +4,7 @@ export const Game = () => {
     return(
         <div>
       <div className="h-24"></div>
-      <div class="w-5/6 justify-center flex flex-row">
+      <div class="justify-center flex flex-row">
         <Canvas/>
         <Tabbar/>
     </div>
