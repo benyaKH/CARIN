@@ -5,9 +5,10 @@ export const Game = () => {
         <div>
       <div className="h-24"></div>
       <div class="justify-center flex flex-row">
-        <Canvas/>
-        <Tabbar/>
+        <Canvas></Canvas>
+        <Tabbar></Tabbar>
     </div>
     </div>
     );
 }
+
