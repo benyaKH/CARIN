@@ -1,7 +1,6 @@
 import styles from './styles.module.css';
 import { useState } from 'react';
-import { StartMenu } from '..';
-import { Game } from '..';
+import { StartMenu, Game } from '..';
 
 export const App = () => {
 

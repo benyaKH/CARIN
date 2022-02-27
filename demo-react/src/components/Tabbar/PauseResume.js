@@ -1,7 +1,7 @@
 import styles from './styles.module.css';
 import React, { useState } from 'react';
 
-export const ChangeTextButton = () => {
+export const PauseResume = () => {
   const [buttonText, setButtonText] = useState("Pause");
 
   const changeText = () => {
@@ -9,6 +9,6 @@ export const ChangeTextButton = () => {
   };
 
   return (
-    <button style={{float: 'right'}} className={styles.pauseButton} onClick={changeText}  >{buttonText? "Pause":"Resume"}</button>
+    <button style={{float: 'right'}} className={styles.Button} onClick={changeText}  >{buttonText? "Pause":"Resume"}</button>
   )
 };

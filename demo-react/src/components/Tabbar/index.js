@@ -1,2 +1,3 @@
 export * from './Tabbar';
-export * from './ChangeTextButton';
+export * from './PauseResume';
+export * from './SpeedButton';
