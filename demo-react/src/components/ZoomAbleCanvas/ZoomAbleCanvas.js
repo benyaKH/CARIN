@@ -10,6 +10,7 @@ export class ZoomAbleCanvas extends Component {
           initialScale={1}
           initialPositionX={0}
           initialPositionY={0}
+          alignmentAnimation={{ sizeX: 0, sizeY: 0 }}
         >
           {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
             <React.Fragment>
