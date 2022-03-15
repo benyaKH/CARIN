@@ -1,11 +1,11 @@
 import { numberOfResources } from './GlobalVar';
 var thisInterval = setInterval(function(){
-    //this if statment checks if the id "thisCanvas" is linked to something
     if(document.getElementById("canvas") != null){
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = 900;
         canvas.height = 600;
+        
         
         // global variables
         const cellSize = 100;
@@ -179,6 +179,9 @@ var thisInterval = setInterval(function(){
                 }
             }
         }
+
+        
+
         // enemies
         class Enemy {
             constructor(verticalPosition){
