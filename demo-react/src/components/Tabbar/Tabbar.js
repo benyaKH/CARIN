@@ -5,12 +5,12 @@ import { PauseResume, SpeedButton } from ".";
 export const Tabbar = () => {
     return (
         <div className="w-72 bg-gray-200">
-            <p className="m-2 text-red">
+            <div className="m-2 text-red">
                 <div className={styles.BoxForButton}>
                     <SpeedButton></SpeedButton>
                     <PauseResume></PauseResume>
                 </div>
-                </p>
+                </div>
             <div className={styles.BoxForText}>
                 AntibodyCost : 
                </div>
