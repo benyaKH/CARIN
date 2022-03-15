@@ -1,4 +1,4 @@
-//set up the interval
+import { numberOfResources } from './GlobalVar';
 var thisInterval = setInterval(function(){
     //this if statment checks if the id "thisCanvas" is linked to something
     if(document.getElementById("canvas") != null){
@@ -16,6 +16,7 @@ var thisInterval = setInterval(function(){
         let gameOver = false;
         let score = 0;
         const winningScore = 50;
+        
         
         const gameGrid = [];
         const defenders = [];
@@ -84,7 +85,7 @@ var thisInterval = setInterval(function(){
                 this.speed = 5;
             }
             update(){
-                this.x += this.speed;
+                this.x -= this.speed;
             }
             draw(){
                 ctx.fillStyle = 'black';
@@ -106,7 +107,7 @@ var thisInterval = setInterval(function(){
                     }
                 }
         
-                if (projectiles[i] && projectiles[i].x > canvas.width - cellSize){
+                if (projectiles[i] && projectiles[i].x > canvas.width + cellSize){
                     projectiles.splice(i, 1);
                     i--;
                 }
@@ -181,7 +182,7 @@ var thisInterval = setInterval(function(){
         // enemies
         class Enemy {
             constructor(verticalPosition){
-                this.x = canvas.width;
+                this.x = 0;
                 this.y = verticalPosition;
                 this.width = cellSize - cellGap * 2;
                 this.height = cellSize - cellGap * 2;
@@ -191,7 +192,7 @@ var thisInterval = setInterval(function(){
                 this.maxHealth = this.health;
             }
             update(){
-                this.x -= this.movement;
+                this.x += this.movement;
             }
             draw(){
                 ctx.fillStyle = 'red';
@@ -205,7 +206,7 @@ var thisInterval = setInterval(function(){
             for (let i = 0; i < enemies.length; i++){
                 enemies[i].update();
                 enemies[i].draw();
-                if (enemies[i].x < 0){
+                if (enemies[i].x > 900){
                     gameOver = true;
                 }
                 if (enemies[i].health <= 0){
@@ -310,10 +311,9 @@ var thisInterval = setInterval(function(){
         //CR:https://www.youtube.com/watch?v=QxYg8-mhhhs&t=302s
   
   
-      //clearInterval() will remove the interval if you have given your interval a name.
+      
       clearInterval(thisInterval)
     }
-  //the 500 means that you will loop through this every 500 milliseconds (1/2 a second)
-  },500)
+  },250)
 
 
