@@ -1,4 +1,4 @@
-import { numberOfResources } from './GlobalVar';
+//import { numberOfResources } from './GlobalVar';
 var thisInterval = setInterval(function(){
     if(document.getElementById("canvas") != null){
         const canvas = document.getElementById('canvas');
