@@ -30,7 +30,9 @@ export const Tabbar = () => {
                 </div>
             </div>
             <div>
-                <BackToMenuButton onStartClick = {()=>setMode('start')} ></BackToMenuButton>
+                <BackToMenuButton 
+                onStartClick = {()=> {setMode('start'); window.location.reload();}} 
+                ></BackToMenuButton>
             </div>
         </div>
     )
