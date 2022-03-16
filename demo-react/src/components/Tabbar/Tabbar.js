@@ -1,6 +1,6 @@
 import { SelectAntibody } from "components";
 import styles from './styles.module.css';
-import { PauseResume, SpeedButton } from ".";
+import { PauseResume, SpeedButton, BackToMenuButton } from ".";
 
 export const Tabbar = () => {
     return (
@@ -16,10 +16,19 @@ export const Tabbar = () => {
                </div>
             <div className="flex ">
                 <div className={styles.BoxForAntibody}>
-                    <SelectAntibody></SelectAntibody>
-                    <SelectAntibody></SelectAntibody>
-                    <SelectAntibody></SelectAntibody>
+                    <SelectAntibody>
+                        <svg className={styles.Antibody1}></svg>
+                    </SelectAntibody>
+                    <SelectAntibody>
+
+                    </SelectAntibody>
+                    <SelectAntibody>
+
+                    </SelectAntibody>
                 </div>
+            </div>
+            <div>
+                <BackToMenuButton onStartClick = {()=>setMode('start')} ></BackToMenuButton>
             </div>
         </div>
     )

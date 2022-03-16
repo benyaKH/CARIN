@@ -4,7 +4,7 @@ import { StartMenu, Game } from '..';
 
 export const App = () => {
 
-  const [mode, setMode] = useState('start');
+  var [mode, setMode] = useState('start');
   
   return <div className={styles.main}>
     {mode === 'start' && <StartMenu onStartClick = {()=>setMode('Game')}/>}
