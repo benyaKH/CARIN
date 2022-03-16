@@ -317,6 +317,6 @@ var thisInterval = setInterval(function(){
       
       clearInterval(thisInterval)
     }
-  },500)
+  },100)
 
 
