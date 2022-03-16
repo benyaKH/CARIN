@@ -1,8 +1,10 @@
 import { SelectAntibody } from "components";
 import styles from './styles.module.css';
 import { PauseResume, SpeedButton, BackToMenuButton } from ".";
+import { setGlobalState, useGlobalState } from '../GlobalState';
 
 export const Tabbar = () => {
+    const[ mode, setMode ] = useGlobalState('mode');
     return (
         <div className="w-72 bg-gray-200">
             <div className="m-2 text-red">
