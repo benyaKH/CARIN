@@ -19,7 +19,6 @@ export const Tabbar = () => {
             <div className="flex ">
                 <div className={styles.BoxForAntibody}>
                     <SelectAntibody>
-                        <svg className={styles.Antibody1}></svg>
                     </SelectAntibody>
                     <SelectAntibody>
 

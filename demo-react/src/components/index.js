@@ -9,3 +9,4 @@ export * from './Tabbar';
 export * from './Virus';
 export * from './ZoomAbleCanvas';
 export * from './script';
+export * from './GlobalVar';

@@ -1,4 +1,5 @@
 //import { numberOfResources } from './GlobalVar';
+import {styles} from './scriptstyle.css';
 var thisInterval = setInterval(function(){
     if(document.getElementById("canvas") != null){
         const canvas = document.getElementById('canvas');
@@ -16,6 +17,7 @@ var thisInterval = setInterval(function(){
         let gameOver = false;
         let score = 0;
         const winningScore = 50;
+        let chosenAntivirus = 1;
         
         
         const gameGrid = [];
@@ -31,7 +33,14 @@ var thisInterval = setInterval(function(){
             y: 10,
             width: 0.1,
             height: 0.1,
+            clicked: false
         }
+        canvas.addEventListener('mousedown', function(){
+            mouse.clicked = true;
+        });
+        canvas.addEventListener('mouseup', function(){
+            mouse.clicked = false;
+        });
         let canvasPosition = canvas.getBoundingClientRect();
         canvas.addEventListener('mousemove', function(e){
             mouse.x = e.x - canvasPosition.left;
@@ -115,6 +124,12 @@ var thisInterval = setInterval(function(){
         }
         
         // defenders
+        const Antibody1 = new Image();
+        Antibody1.src = 'A1.png';
+        const Antibody2 = new Image();
+        Antibody2.src = 'A2.png';
+        const Antibody3 = new Image();
+        Antibody3.src = 'A3.png';
         class Defender {
             constructor(x, y){
                 this.x = x;
@@ -122,16 +137,27 @@ var thisInterval = setInterval(function(){
                 this.width = cellSize - cellGap * 2;
                 this.height = cellSize - cellGap * 2;
                 this.shooting = false;
+                this.shootnow = false;
                 this.health = 100;
                 this.projectiles = [];
                 this.timer = 0;
+                this.spriteWidth = 300;
+                this.spriteHeight = 300;
+                this.chosenAntivirus = chosenAntivirus;
             }
             draw(){
-                ctx.fillStyle = 'blue';
-                ctx.fillRect(this.x, this.y, this.width, this.height);
+                //ctx.fillStyle = 'blue';
+                //ctx.fillRect(this.x, this.y, this.width, this.height);
                 ctx.fillStyle = 'gold';
                 ctx.font = '30px Orbitron';
                 ctx.fillText(Math.floor(this.health), this.x + 15, this.y + 30);
+                if(this.chosenAntivirus === 1){
+                    ctx.drawImage(Antibody1, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
+                }else if(this.chosenAntivirus === 2){
+                    ctx.drawImage(Antibody2, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
+                }else if(this.chosenAntivirus === 3){
+                    ctx.drawImage(Antibody3, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
+                }
             }
             update(){
                 if (this.shooting){
@@ -144,19 +170,7 @@ var thisInterval = setInterval(function(){
                 }
             }
         }
-        canvas.addEventListener('click', function(){
-            const gridPositionX = mouse.x  - (mouse.x % cellSize) + cellGap;
-            const gridPositionY = mouse.y - (mouse.y % cellSize) + cellGap;
-            if (gridPositionY < cellSize) return;
-            for (let i = 0; i < defenders.length; i++){
-                if (defenders[i].x === gridPositionX && defenders[i].y === gridPositionY) return;
-            }
-            let defenderCost = 100;
-            if (numberOfResources >= defenderCost){
-                defenders.push(new Defender(gridPositionX, gridPositionY));
-                numberOfResources -= defenderCost;
-            }
-        });
+        
         function handleDefenders(){
             for (let i = 0; i < defenders.length; i++){
                 defenders[i].draw();
@@ -180,7 +194,106 @@ var thisInterval = setInterval(function(){
             }
         }
 
+        const card1 = {
+            x: 10,
+            y: 5,
+            width: 90,
+            height: 90
+        }
+
+        const card2 = {
+            x: 110,
+            y: 5,
+            width: 90,
+            height: 90
+        }
+
+        const card3 = {
+            x: 210,
+            y: 5,
+            width: 90,
+            height: 90
+        }
+
+        function chooseDefender(){
+            let card1stroke = 'black';
+            let card2stroke = 'black';
+            let card3stroke = 'black';
+            if(collision(mouse, card1) && mouse.c){
+                chosenAntivirus = 1;
+            }else if(collision(mouse, card2)){
+                chosenAntivirus = 2;
+            }else if(collision(mouse, card3)){
+                chosenAntivirus = 3;
+            }
+            if (chosenAntivirus === 1){
+                card1stroke = 'gold';
+                card2stroke = 'black';
+                card3stroke = 'black';
+            }else if(chosenAntivirus === 2){
+                card1stroke = 'black';
+                card2stroke = 'gold';
+                card3stroke = 'black';
+            }else if(chosenAntivirus === 3){
+                card1stroke = 'black';
+                card2stroke = 'black';
+                card3stroke = 'gold';
+            }else {
+                card1stroke = 'black';
+                card2stroke = 'black';
+                card3stroke = 'black';
+            }
+            ctx.lineWidth = 1;
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.fillRect(card1.x, card1.y, card1.width, card1.height);
+            ctx.strokeStyle = card1stroke;
+            ctx.strokeRect(card1.x, card1.y, card1.width, card1.height);
+            ctx.drawImage(Antibody1, 0, 0, 350, 350, 15, 12.5, 90, 90);
+            ctx.fillRect(card2.x, card2.y, card2.width, card2.height);
+            ctx.strokeStyle = card2stroke;
+            ctx.strokeRect(card2.x, card2.y, card2.width, card2.height);
+            ctx.drawImage(Antibody2, 0, 0, 330, 330, 115, 12.5, 90, 90);
+            ctx.fillRect(card3.x, card3.y, card3.width, card3.height);
+            ctx.strokeStyle = card3stroke;
+            ctx.strokeRect(card3.x, card3.y, card3.width, card3.height);
+            ctx.drawImage(Antibody3, 0, 0, 340, 340, 215, 12.5, 90, 90);
+        }
         
+        //Message
+        const Messages  =  [];
+        class Message {
+            constructor(value, x, y, size, color){
+                this.value = value;
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.lifeSpan = 0;
+                this.color = color;
+                this.opacity = 1;
+            }
+            update(){
+                this.y -= 0.3;
+                this.lifeSpan += 1;
+                if(this.opacity > 0.05) this.opacity -= 0.05;
+            }
+            draw(){
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.font = this.size + 'px Obritron';
+                ctx.fillText(this.value, this.x, this.y);
+                ctx.globalAlpha = 1;
+            }
+        }
+        function handleMessages(){
+            for (let i = 0; i < Messages.length; i++){
+                Messages[i].update();
+                Messages[i].draw();
+                if(Messages[i].lifeSpan >= 50){
+                    Messages.splice(i, 1);
+                    i--;
+                }
+            }
+        }
 
         // enemies
         class Enemy {
@@ -214,6 +327,8 @@ var thisInterval = setInterval(function(){
                 }
                 if (enemies[i].health <= 0){
                     let gainedResources = enemies[i].maxHealth/10;
+                    Messages.push(new Message('+' + gainedResources, enemies[i].x, enemies[i].y, 30, 'black'));
+                    Messages.push(new Message('+' + gainedResources, 250, 50, 30, 'gold'));
                     numberOfResources += gainedResources;
                     score += gainedResources;
                     const findThisIndex = enemyPositions.indexOf(enemies[i].y);
@@ -264,10 +379,10 @@ var thisInterval = setInterval(function(){
         
         // utilities
         function handleGameStatus(){
-            ctx.fillStyle = 'gold';
+            ctx.fillStyle = 'black';
             ctx.font = '30px Orbitron';
-            ctx.fillText('Score: ' + score, 20, 40);
-            ctx.fillText('Resources: ' + numberOfResources, 20, 80);
+            ctx.fillText('Score: ' + score, 630, 40);
+            ctx.fillText('AntibodyCost : ' + numberOfResources, 630, 80);
             if (gameOver){
                 ctx.fillStyle = 'black';
                 ctx.font = '90px Orbitron';
@@ -281,17 +396,35 @@ var thisInterval = setInterval(function(){
                 ctx.fillText('You win with ' + score + ' points!', 134, 340);
             }
         }
+
+        canvas.addEventListener('click', function(){
+            const gridPositionX = mouse.x  - (mouse.x % cellSize) + cellGap;
+            const gridPositionY = mouse.y - (mouse.y % cellSize) + cellGap;
+            if (gridPositionY < cellSize) return;
+            for (let i = 0; i < defenders.length; i++){
+                if (defenders[i].x === gridPositionX && defenders[i].y === gridPositionY) return;
+            }
+            let defenderCost = 100;
+            if (numberOfResources >= defenderCost){
+                defenders.push(new Defender(gridPositionX, gridPositionY));
+                numberOfResources -= defenderCost;
+            } else {
+                Messages.push(new Message('Not enough cost', mouse.x, mouse.y, 30, 'red'));
+            }
+        });
         
         function animate(){
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'blue';
+            ctx.fillStyle = '#e5e7eb';
             ctx.fillRect(0,0,controlsBar.width, controlsBar.height);
             handleGameGrid();
             handleDefenders();
             handleResources();
             handleProjectiles();
             handleEnemies();
+            chooseDefender();
             handleGameStatus();
+            handleMessages();
             frame++;
             if (!gameOver) requestAnimationFrame(animate);
         }
