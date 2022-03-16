@@ -1,17 +1,18 @@
-//import { numberOfResources } from './GlobalVar';
 import {styles} from './scriptstyle.css';
 var thisInterval = setInterval(function(){
-    if(document.getElementById("canvas") != null){
+    if((document.getElementById("canvas")) != null) {
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = 900;
+        //const bar = document.getElementById('bar');
+        //const ctx2 = bar.getContext('2d');
+        canvas.width = 800;
         canvas.height = 600;
         
         
         //Global Variables
-        const cellSize = 100;
+        const cellSize = 50;
         const cellGap = 3;
-        let Cost = 300;
+        let Cost = 1000;
         let virusesInterval = 600;
         let frame = 0;
         let gameOver = false;
@@ -28,7 +29,7 @@ var thisInterval = setInterval(function(){
         const Viruses = [];
         const VirusPositions = [];
         const Attacks = [];
-        const resources = [];
+        //const resources = [];
         
         // mouse
         const mouse = {
@@ -56,8 +57,8 @@ var thisInterval = setInterval(function(){
         
         // Menu
         const controlsBar = {
-            width: canvas.width,
-            height: cellSize,
+            width: 200,
+            height: 600,
         }
         class Cell {
             constructor(x, y){
@@ -74,8 +75,8 @@ var thisInterval = setInterval(function(){
             }
         }
         function createGrid(){
-            for (let y = cellSize; y < canvas.height; y += cellSize){
-                for (let x = 0; x < canvas.width; x += cellSize){
+            for (let y = 0; y < canvas.height; y += cellSize){
+                for (let x = 0; x < canvas.width-200; x += cellSize){
                     gameGrid.push(new Cell(x, y));
                 }
             }
@@ -91,10 +92,10 @@ var thisInterval = setInterval(function(){
             constructor(x, y){
                 this.x = x;
                 this.y = y;
-                this.width = 10;
-                this.height = 10;
-                this.power = 20;
-                this.speed = 5;
+                this.width = 3;
+                this.height = 3;
+                this.power = 10;
+                this.speed = 2;
             }
             update(){
                 this.x -= this.speed;
@@ -119,7 +120,7 @@ var thisInterval = setInterval(function(){
                     }
                 }
         
-                if (Attacks[i] && Attacks[i].x > canvas.width + cellSize){
+                if (Attacks[i] && Attacks[i].x < 0){
                     Attacks.splice(i, 1);
                     i--;
                 }
@@ -150,9 +151,9 @@ var thisInterval = setInterval(function(){
             draw(){
                 //ctx.fillStyle = 'blue';
                 //ctx.fillRect(this.x, this.y, this.width, this.height);
-                ctx.fillStyle = 'gold';
-                ctx.font = '30px Orbitron';
-                ctx.fillText(Math.floor(this.health), this.x + 15, this.y + 30);
+                ctx.fillStyle = 'green';
+                ctx.font = '10px Orbitron';
+                ctx.fillText(Math.floor(this.health), this.x + 15, this.y );
                 if(this.chosenAntibody === 1){
                     ctx.drawImage(Antibody1, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
                 }else if(this.chosenAntibody === 2){
@@ -165,7 +166,7 @@ var thisInterval = setInterval(function(){
                 if (this.shooting){
                     this.timer++;
                     if (this.timer % 100 === 0){
-                        Attacks.push(new Attack(this.x + 70, this.y + 50));
+                        Attacks.push(new Attack(this.x + 25, this.y + 25));
                     }
                 } else {
                     this.timer = 0;
@@ -197,22 +198,22 @@ var thisInterval = setInterval(function(){
         }
 
         const card1 = {
-            x: 10,
-            y: 5,
+            x: 610,
+            y: 110,
             width: 90,
             height: 90
         }
 
         const card2 = {
-            x: 110,
-            y: 5,
+            x: 610,
+            y: 210,
             width: 90,
             height: 90
         }
 
         const card3 = {
-            x: 210,
-            y: 5,
+            x: 610,
+            y: 310,
             width: 90,
             height: 90
         }
@@ -247,15 +248,15 @@ var thisInterval = setInterval(function(){
             ctx.fillRect(card1.x, card1.y, card1.width, card1.height);
             ctx.strokeStyle = card1stroke;
             ctx.strokeRect(card1.x, card1.y, card1.width, card1.height);
-            ctx.drawImage(Antibody1, 0, 0, 350, 350, 15, 12.5, 90, 90);
+            ctx.drawImage(Antibody1, 0, 0, 350, 350, card1.x+6, card1.y+5, 90, 90);
             ctx.fillRect(card2.x, card2.y, card2.width, card2.height);
             ctx.strokeStyle = card2stroke;
             ctx.strokeRect(card2.x, card2.y, card2.width, card2.height);
-            ctx.drawImage(Antibody2, 0, 0, 330, 330, 115, 12.5, 90, 90);
+            ctx.drawImage(Antibody2, 0, 0, 330, 330, card2.x+5, card2.y+5, 90, 90);
             ctx.fillRect(card3.x, card3.y, card3.width, card3.height);
             ctx.strokeStyle = card3stroke;
             ctx.strokeRect(card3.x, card3.y, card3.width, card3.height);
-            ctx.drawImage(Antibody3, 0, 0, 340, 340, 215, 12.5, 90, 90);
+            ctx.drawImage(Antibody3, 0, 0, 340, 340, card3.x+5, card3.y+5, 90, 90);
         }
         
         //Message
@@ -300,13 +301,13 @@ var thisInterval = setInterval(function(){
         Virus1.src = 'V.png';
         VirusTypes.push(Virus1);
 
-        class Enemy {
+        class Virus {
             constructor(verticalPosition){
                 this.x = 0;
                 this.y = verticalPosition;
                 this.width = cellSize - cellGap * 2;
                 this.height = cellSize - cellGap * 2;
-                this.speed = Math.random() * 0.2 + 0.4;
+                this.speed = Math.random() * 0.01 + 0.1;
                 this.movement = this.speed;
                 this.health = 100;
                 this.maxHealth = this.health;
@@ -320,9 +321,9 @@ var thisInterval = setInterval(function(){
             draw(){
                 //ctx.fillStyle = 'red';
                 //ctx.fillRect(this.x, this.y, this.width, this.height);
-                ctx.fillStyle = 'black';
-                ctx.font = '30px Orbitron';
-                ctx.fillText(Math.floor(this.health), this.x + 15, this.y + 30);
+                ctx.fillStyle = 'red';
+                ctx.font = '10px Orbitron';
+                ctx.fillText(Math.floor(this.health), this.x + 15, this.y );
                 ctx.drawImage(this.VirusType, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height)
             }
         }
@@ -330,7 +331,7 @@ var thisInterval = setInterval(function(){
             for (let i = 0; i < Viruses.length; i++){
                 Viruses[i].update();
                 Viruses[i].draw();
-                if (Viruses[i].x > 900){
+                if (Viruses[i].x > 550){
                     gameOver = true;
                 }
                 if (Viruses[i].health <= 0){
@@ -345,70 +346,71 @@ var thisInterval = setInterval(function(){
                     i--;
                   }
             }
-            if (frame % virusesInterval === 0 && score < winningScore){
-                let verticalPosition = Math.floor(Math.random() * 5 + 1) * cellSize + cellGap;
-                Viruses.push(new Enemy(verticalPosition));
+            if ( frame % virusesInterval === 0 && score < winningScore){
+                let verticalPosition = Math.floor(Math.random() * 12 ) * cellSize + cellGap;
+                Viruses.push(new Virus(verticalPosition));
                 VirusPositions.push(verticalPosition);
-                if (virusesInterval > 120) virusesInterval -= 50;
+                if (virusesInterval > 120) virusesInterval -= 5;
             }
         }
         
         // resources
-        const amounts = [20, 30, 40];
-        class Resource {
-            constructor(){
-                this.x = Math.random() * (canvas.width - cellSize);
-                this.y = (Math.floor(Math.random() * 5) + 1) * cellSize + 25;
-                this.width = cellSize * 0.6;
-                this.height = cellSize * 0.6;
-                this.amount = amounts[Math.floor(Math.random() * amounts.length)];
-            }
-            draw(){
-                ctx.fillStyle = 'yellow';
-                ctx.fillRect(this.x, this.y, this.width, this.height);
-                ctx.fillStyle = 'black';
-                ctx.font = '20px Orbitron';
-                ctx.fillText(this.amount, this.x + 15, this.y + 25);
-            }
-        }
-        function handleResources(){
-            if (frame % 500 === 0 && score < winningScore){
-                resources.push(new Resource());
-            }
-            for (let i = 0; i < resources.length; i++){
-                resources[i].draw();
-                if (resources[i] && mouse.x && mouse.y && collision(resources[i], mouse)){
-                    Cost += resources[i].amount;
-                    resources.splice(i, 1);
-                    i--;
-                }
-            }
-        }
+        // const amounts = [20, 30, 40];
+        // class Resource {
+        //     constructor(){
+        //         this.x = Math.random() * (canvas.width - cellSize);
+        //         this.y = (Math.floor(Math.random() * 5) + 1) * cellSize + 25;
+        //         this.width = cellSize * 0.6;
+        //         this.height = cellSize * 0.6;
+        //         this.amount = amounts[Math.floor(Math.random() * amounts.length)];
+        //     }
+        //     draw(){
+        //         ctx.fillStyle = 'yellow';
+        //         ctx.fillRect(this.x, this.y, this.width, this.height);
+        //         ctx.fillStyle = 'black';
+        //         ctx.font = '20px Orbitron';
+        //         ctx.fillText(this.amount, this.x + 15, this.y + 25);
+        //     }
+        // }
+        // function handleResources(){
+        //     if (frame % 500 === 0 && score < winningScore){
+        //         resources.push(new Resource());
+        //     }
+        //     for (let i = 0; i < resources.length; i++){
+        //         resources[i].draw();
+        //         if (resources[i] && mouse.x && mouse.y && collision(resources[i], mouse)){
+        //             Cost += resources[i].amount;
+        //             resources.splice(i, 1);
+        //             i--;
+        //         }
+        //     }
+        // }
         
         // utilities
         function handleGameStatus(){
             ctx.fillStyle = 'black';
-            ctx.font = '30px Orbitron';
-            ctx.fillText('Score: ' + score, 630, 40);
-            ctx.fillText('AntibodyCost : ' + Cost, 630, 80);
+            ctx.font = '20px Orbitron';
+            ctx.fillText('AntibodyCost : ' + Cost, 620, 40);
+            ctx.fillText('Score: ' + score, 620, 80);
             if (gameOver){
                 ctx.fillStyle = 'black';
                 ctx.font = '90px Orbitron';
-                ctx.fillText('GAME OVER', 135, 330);
+                ctx.fillText('GAME OVER', 35, 330);
             }
             if (score >= winningScore && Viruses.length === 0){
                 ctx.fillStyle = 'black';
                 ctx.font = '60px Orbitron';
-                ctx.fillText('LEVEL COMPLETE', 130, 300);
+                ctx.fillText('LEVEL COMPLETE', 35, 330);
                 ctx.font = '30px Orbitron';
-                ctx.fillText('You win with ' + score + ' points!', 134, 340);
+                ctx.fillText('You win with ' + score + ' points!', 70, 340);
             }
         }
 
         canvas.addEventListener('click', function(){
             const gridPositionX = mouse.x  - (mouse.x % cellSize) + cellGap;
             const gridPositionY = mouse.y - (mouse.y % cellSize) + cellGap;
-            if (gridPositionY < cellSize) return;
+            if (gridPositionY < 0) return;
+            if (gridPositionX > 600) return;
             for (let i = 0; i < Antibodies.length; i++){
                 if (Antibodies[i].x === gridPositionX && Antibodies[i].y === gridPositionY) return;
             }
@@ -428,11 +430,11 @@ var thisInterval = setInterval(function(){
         function animate(){
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#e5e7eb';
-            ctx.fillRect(0,0,controlsBar.width, controlsBar.height);
+            ctx.fillRect(600,0,controlsBar.width, controlsBar.height);
             handleGameGrid();
             handleAntibodies();
             chooseAntibody();
-            handleResources();
+            //handleResources();
             handleAttacks();
             handleViruses();
             handleGameStatus();

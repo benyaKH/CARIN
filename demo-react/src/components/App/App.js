@@ -1,6 +1,6 @@
 import styles from './styles.module.css';
 import { useState } from 'react';
-import { StartMenu, Game } from '..';
+import { StartMenu, Game, ZoomAbleCanvas } from '..';
 import { createGlobalState } from 'react-hooks-global-state';
 import { setGlobalState, useGlobalState } from '../GlobalState';
 

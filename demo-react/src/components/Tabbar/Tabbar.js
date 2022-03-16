@@ -1,4 +1,3 @@
-import { SelectAntibody } from "components";
 import styles from './styles.module.css';
 import { PauseResume, SpeedButton, BackToMenuButton } from ".";
 import { setGlobalState, useGlobalState } from '../GlobalState';
@@ -6,32 +5,19 @@ import { setGlobalState, useGlobalState } from '../GlobalState';
 export const Tabbar = () => {
     const[ mode, setMode ] = useGlobalState('mode');
     return (
-        <div className="w-72 bg-gray-200">
-            <div className="m-2 text-red">
+        <div className="w-20 bg-gray-200">
+            <div>
                 <div className={styles.BoxForButton}>
-                    <SpeedButton></SpeedButton>
                     <PauseResume></PauseResume>
                 </div>
+                <div className={styles.BoxForButton}>
+                    <SpeedButton></SpeedButton>
                 </div>
-            <div className={styles.BoxForText}>
-                AntibodyCost : 
-               </div>
-            <div className="flex ">
-                <div className={styles.BoxForAntibody}>
-                    <SelectAntibody>
-                    </SelectAntibody>
-                    <SelectAntibody>
-
-                    </SelectAntibody>
-                    <SelectAntibody>
-
-                    </SelectAntibody>
-                </div>
-            </div>
-            <div>
+                <div className={styles.BoxForButton}>
                 <BackToMenuButton 
                 onStartClick = {()=> {setMode('start'); window.location.reload();}} 
                 ></BackToMenuButton>
+                </div>
             </div>
         </div>
     )

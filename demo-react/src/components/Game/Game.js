@@ -1,4 +1,4 @@
-import { Tabbar, ZoomAbleCanvas } from "components";
+import { Tabbar, ZoomAbleCanvas, Canvas } from "components";
 
 export const Game = () => {
     return(
