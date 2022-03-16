@@ -8,23 +8,26 @@ var thisInterval = setInterval(function(){
         canvas.height = 600;
         
         
-        // global variables
+        //Global Variables
         const cellSize = 100;
         const cellGap = 3;
-        let numberOfResources = 300;
-        let enemiesInterval = 600;
+        let Cost = 300;
+        let virusesInterval = 600;
         let frame = 0;
         let gameOver = false;
         let score = 0;
-        const winningScore = 50;
-        let chosenAntivirus = 1;
+        const winningScore = 100;
+        let chosenAntibody = 0;
+        let card1stroke = 'white';
+        let card2stroke = 'white';
+        let card3stroke = 'white';
         
         
         const gameGrid = [];
-        const defenders = [];
-        const enemies = [];
-        const enemyPositions = [];
-        const projectiles = [];
+        const Antibodies = [];
+        const Viruses = [];
+        const VirusPositions = [];
+        const Attacks = [];
         const resources = [];
         
         // mouse
@@ -51,7 +54,7 @@ var thisInterval = setInterval(function(){
             mouse.y = undefined;
         });
         
-        // game board
+        // Menu
         const controlsBar = {
             width: canvas.width,
             height: cellSize,
@@ -83,8 +86,8 @@ var thisInterval = setInterval(function(){
                 gameGrid[i].draw();
             }
         }
-        // projectiles
-        class Projectile {
+        // Attacks
+        class Attack {
             constructor(x, y){
                 this.x = x;
                 this.y = y;
@@ -103,47 +106,46 @@ var thisInterval = setInterval(function(){
                 ctx.fill();
             }
         }
-        function handleProjectiles(){
-            for (let i = 0; i < projectiles.length; i++){
-                projectiles[i].update();
-                projectiles[i].draw();
+        function handleAttacks(){
+            for (let i = 0; i < Attacks.length; i++){
+                Attacks[i].update();
+                Attacks[i].draw();
         
-                for (let j = 0; j < enemies.length; j++){
-                    if (enemies[j] && projectiles[i] && collision(projectiles[i], enemies[j])){
-                        enemies[j].health -= projectiles[i].power;
-                        projectiles.splice(i, 1);
+                for (let j = 0; j < Viruses.length; j++){
+                    if (Viruses[j] && Attacks[i] && collision(Attacks[i], Viruses[j])){
+                        Viruses[j].health -= Attacks[i].power;
+                        Attacks.splice(i, 1);
                         i--;
                     }
                 }
         
-                if (projectiles[i] && projectiles[i].x > canvas.width + cellSize){
-                    projectiles.splice(i, 1);
+                if (Attacks[i] && Attacks[i].x > canvas.width + cellSize){
+                    Attacks.splice(i, 1);
                     i--;
                 }
             }
         }
         
-        // defenders
+        // Antibody
         const Antibody1 = new Image();
         Antibody1.src = 'A1.png';
         const Antibody2 = new Image();
         Antibody2.src = 'A2.png';
         const Antibody3 = new Image();
         Antibody3.src = 'A3.png';
-        class Defender {
+        class Antibody {
             constructor(x, y){
                 this.x = x;
                 this.y = y;
                 this.width = cellSize - cellGap * 2;
                 this.height = cellSize - cellGap * 2;
                 this.shooting = false;
-                this.shootnow = false;
                 this.health = 100;
-                this.projectiles = [];
+                this.Attacks = [];
                 this.timer = 0;
                 this.spriteWidth = 300;
                 this.spriteHeight = 300;
-                this.chosenAntivirus = chosenAntivirus;
+                this.chosenAntibody = chosenAntibody;
             }
             draw(){
                 //ctx.fillStyle = 'blue';
@@ -151,11 +153,11 @@ var thisInterval = setInterval(function(){
                 ctx.fillStyle = 'gold';
                 ctx.font = '30px Orbitron';
                 ctx.fillText(Math.floor(this.health), this.x + 15, this.y + 30);
-                if(this.chosenAntivirus === 1){
+                if(this.chosenAntibody === 1){
                     ctx.drawImage(Antibody1, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
-                }else if(this.chosenAntivirus === 2){
+                }else if(this.chosenAntibody === 2){
                     ctx.drawImage(Antibody2, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
-                }else if(this.chosenAntivirus === 3){
+                }else if(this.chosenAntibody === 3){
                     ctx.drawImage(Antibody3, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
                 }
             }
@@ -163,7 +165,7 @@ var thisInterval = setInterval(function(){
                 if (this.shooting){
                     this.timer++;
                     if (this.timer % 100 === 0){
-                        projectiles.push(new Projectile(this.x + 70, this.y + 50));
+                        Attacks.push(new Attack(this.x + 70, this.y + 50));
                     }
                 } else {
                     this.timer = 0;
@@ -171,24 +173,24 @@ var thisInterval = setInterval(function(){
             }
         }
         
-        function handleDefenders(){
-            for (let i = 0; i < defenders.length; i++){
-                defenders[i].draw();
-                defenders[i].update();
-                if (enemyPositions.indexOf(defenders[i].y) !== -1){
-                    defenders[i].shooting = true;
+        function handleAntibodies(){
+            for (let i = 0; i < Antibodies.length; i++){
+                Antibodies[i].draw();
+                Antibodies[i].update();
+                if (VirusPositions.indexOf(Antibodies[i].y) !== -1){
+                    Antibodies[i].shooting = true;
                 } else {
-                    defenders[i].shooting = false;
+                    Antibodies[i].shooting = false;
                 }
-                for (let j = 0; j < enemies.length; j++){
-                    if (defenders[i] && collision(defenders[i], enemies[j])){
-                        enemies[j].movement = 0;
-                        defenders[i].health -= 1;
+                for (let j = 0; j < Viruses.length; j++){
+                    if (Antibodies[i] && collision(Antibodies[i], Viruses[j])){
+                        Viruses[j].movement = 0;
+                        Antibodies[i].health -= 1;
                     }
-                    if (defenders[i] && defenders[i].health <= 0){
-                        defenders.splice(i, 1);
+                    if (Antibodies[i] && Antibodies[i].health <= 0){
+                        Antibodies.splice(i, 1);
                         i--;
-                        enemies[j].movement = enemies[j].speed;
+                        Viruses[j].movement = Viruses[j].speed;
                     }
                 }
             }
@@ -215,36 +217,33 @@ var thisInterval = setInterval(function(){
             height: 90
         }
 
-        function chooseDefender(){
-            let card1stroke = 'black';
-            let card2stroke = 'black';
-            let card3stroke = 'black';
-            if(collision(mouse, card1) && mouse.c){
-                chosenAntivirus = 1;
-            }else if(collision(mouse, card2)){
-                chosenAntivirus = 2;
-            }else if(collision(mouse, card3)){
-                chosenAntivirus = 3;
+        function chooseAntibody(){
+            if(collision(mouse, card1) && mouse.clicked){
+                chosenAntibody = 1;
+            }else if(collision(mouse, card2) && mouse.clicked){
+                chosenAntibody = 2;
+            }else if(collision(mouse, card3) && mouse.clicked){
+                chosenAntibody = 3;
             }
-            if (chosenAntivirus === 1){
-                card1stroke = 'gold';
-                card2stroke = 'black';
-                card3stroke = 'black';
-            }else if(chosenAntivirus === 2){
-                card1stroke = 'black';
-                card2stroke = 'gold';
-                card3stroke = 'black';
-            }else if(chosenAntivirus === 3){
-                card1stroke = 'black';
-                card2stroke = 'black';
-                card3stroke = 'gold';
+            if (chosenAntibody === 1){
+                card1stroke = 'balck';
+                card2stroke = 'white';
+                card3stroke = 'white';
+            }else if(chosenAntibody === 2){
+                card1stroke = 'white';
+                card2stroke = 'balck';
+                card3stroke = 'white';
+            }else if(chosenAntibody === 3){
+                card1stroke = 'white';
+                card2stroke = 'white';
+                card3stroke = 'balck';
             }else {
-                card1stroke = 'black';
-                card2stroke = 'black';
-                card3stroke = 'black';
+                card1stroke = 'white';
+                card2stroke = 'white';
+                card3stroke = 'white';
             }
             ctx.lineWidth = 1;
-            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.fillStyle = '#FFFFFF';
             ctx.fillRect(card1.x, card1.y, card1.width, card1.height);
             ctx.strokeStyle = card1stroke;
             ctx.strokeRect(card1.x, card1.y, card1.width, card1.height);
@@ -295,7 +294,12 @@ var thisInterval = setInterval(function(){
             }
         }
 
-        // enemies
+        //Viruses
+        const VirusTypes = [];
+        const Virus1 = new Image();
+        Virus1.src = 'V.png';
+        VirusTypes.push(Virus1);
+
         class Enemy {
             constructor(verticalPosition){
                 this.x = 0;
@@ -306,42 +310,46 @@ var thisInterval = setInterval(function(){
                 this.movement = this.speed;
                 this.health = 100;
                 this.maxHealth = this.health;
+                this.VirusType = VirusTypes[0];
+                this.spriteWidth = 300;
+                this.spriteHeight = 300;
             }
             update(){
                 this.x += this.movement;
             }
             draw(){
-                ctx.fillStyle = 'red';
-                ctx.fillRect(this.x, this.y, this.width, this.height);
+                //ctx.fillStyle = 'red';
+                //ctx.fillRect(this.x, this.y, this.width, this.height);
                 ctx.fillStyle = 'black';
                 ctx.font = '30px Orbitron';
                 ctx.fillText(Math.floor(this.health), this.x + 15, this.y + 30);
+                ctx.drawImage(this.VirusType, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height)
             }
         }
-        function handleEnemies(){
-            for (let i = 0; i < enemies.length; i++){
-                enemies[i].update();
-                enemies[i].draw();
-                if (enemies[i].x > 900){
+        function handleViruses(){
+            for (let i = 0; i < Viruses.length; i++){
+                Viruses[i].update();
+                Viruses[i].draw();
+                if (Viruses[i].x > 900){
                     gameOver = true;
                 }
-                if (enemies[i].health <= 0){
-                    let gainedResources = enemies[i].maxHealth/10;
-                    Messages.push(new Message('+' + gainedResources, enemies[i].x, enemies[i].y, 30, 'black'));
+                if (Viruses[i].health <= 0){
+                    let gainedResources = Viruses[i].maxHealth/10;
+                    Messages.push(new Message('+' + gainedResources, Viruses[i].x, Viruses[i].y, 30, 'black'));
                     Messages.push(new Message('+' + gainedResources, 250, 50, 30, 'gold'));
-                    numberOfResources += gainedResources;
+                    Cost += gainedResources;
                     score += gainedResources;
-                    const findThisIndex = enemyPositions.indexOf(enemies[i].y);
-                    enemyPositions.splice(findThisIndex, 1);
-                    enemies.splice(i, 1);
+                    const findThisIndex = VirusPositions.indexOf(Viruses[i].y);
+                    VirusPositions.splice(findThisIndex, 1);
+                    Viruses.splice(i, 1);
                     i--;
                   }
             }
-            if (frame % enemiesInterval === 0 && score < winningScore){
+            if (frame % virusesInterval === 0 && score < winningScore){
                 let verticalPosition = Math.floor(Math.random() * 5 + 1) * cellSize + cellGap;
-                enemies.push(new Enemy(verticalPosition));
-                enemyPositions.push(verticalPosition);
-                if (enemiesInterval > 120) enemiesInterval -= 50;
+                Viruses.push(new Enemy(verticalPosition));
+                VirusPositions.push(verticalPosition);
+                if (virusesInterval > 120) virusesInterval -= 50;
             }
         }
         
@@ -370,7 +378,7 @@ var thisInterval = setInterval(function(){
             for (let i = 0; i < resources.length; i++){
                 resources[i].draw();
                 if (resources[i] && mouse.x && mouse.y && collision(resources[i], mouse)){
-                    numberOfResources += resources[i].amount;
+                    Cost += resources[i].amount;
                     resources.splice(i, 1);
                     i--;
                 }
@@ -382,13 +390,13 @@ var thisInterval = setInterval(function(){
             ctx.fillStyle = 'black';
             ctx.font = '30px Orbitron';
             ctx.fillText('Score: ' + score, 630, 40);
-            ctx.fillText('AntibodyCost : ' + numberOfResources, 630, 80);
+            ctx.fillText('AntibodyCost : ' + Cost, 630, 80);
             if (gameOver){
                 ctx.fillStyle = 'black';
                 ctx.font = '90px Orbitron';
                 ctx.fillText('GAME OVER', 135, 330);
             }
-            if (score >= winningScore && enemies.length === 0){
+            if (score >= winningScore && Viruses.length === 0){
                 ctx.fillStyle = 'black';
                 ctx.font = '60px Orbitron';
                 ctx.fillText('LEVEL COMPLETE', 130, 300);
@@ -401,13 +409,17 @@ var thisInterval = setInterval(function(){
             const gridPositionX = mouse.x  - (mouse.x % cellSize) + cellGap;
             const gridPositionY = mouse.y - (mouse.y % cellSize) + cellGap;
             if (gridPositionY < cellSize) return;
-            for (let i = 0; i < defenders.length; i++){
-                if (defenders[i].x === gridPositionX && defenders[i].y === gridPositionY) return;
+            for (let i = 0; i < Antibodies.length; i++){
+                if (Antibodies[i].x === gridPositionX && Antibodies[i].y === gridPositionY) return;
             }
-            let defenderCost = 100;
-            if (numberOfResources >= defenderCost){
-                defenders.push(new Defender(gridPositionX, gridPositionY));
-                numberOfResources -= defenderCost;
+            let AntibodyCost = 100;
+            if (Cost >= AntibodyCost){
+                if(chosenAntibody != 0){
+                    Antibodies.push(new Antibody(gridPositionX, gridPositionY));
+                    Cost -= AntibodyCost;
+                }else{
+                    Messages.push(new Message('Not select antibody yet', mouse.x, mouse.y, 30, 'red'));
+                }
             } else {
                 Messages.push(new Message('Not enough cost', mouse.x, mouse.y, 30, 'red'));
             }
@@ -418,11 +430,11 @@ var thisInterval = setInterval(function(){
             ctx.fillStyle = '#e5e7eb';
             ctx.fillRect(0,0,controlsBar.width, controlsBar.height);
             handleGameGrid();
-            handleDefenders();
+            handleAntibodies();
+            chooseAntibody();
             handleResources();
-            handleProjectiles();
-            handleEnemies();
-            chooseDefender();
+            handleAttacks();
+            handleViruses();
             handleGameStatus();
             handleMessages();
             frame++;
@@ -445,6 +457,7 @@ var thisInterval = setInterval(function(){
         })
         
         //CR:https://www.youtube.com/watch?v=QxYg8-mhhhs&t=302s
+        //CR:https://www.youtube.com/watch?v=mpvNwYmTMJ4&t=2767s
   
   
       
